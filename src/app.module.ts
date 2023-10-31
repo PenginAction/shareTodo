@@ -3,7 +3,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import * as process from 'process';
 import { join } from 'path';
-import { ProductModule } from './product/product.module';
+import { TaskModule } from './task/task.module';
 
 @Module({
   imports: [
@@ -12,7 +12,7 @@ import { ProductModule } from './product/product.module';
       playground: true,
       autoSchemaFile: join(process.cwd(), 'src/schema.sql'),
     }),
-    ProductModule,
+    TaskModule,
   ],
 })
 export class AppModule {}
