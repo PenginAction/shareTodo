@@ -11,7 +11,7 @@ import { PrismaModule } from './prisma/prisma.module';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       playground: true,
-      autoSchemaFile: join(process.cwd(), 'src/schema.sql'),
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
     TaskModule,
     PrismaModule,
