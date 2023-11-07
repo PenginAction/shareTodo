@@ -37,3 +37,11 @@ model User {
   updatedAt DateTime @updatedAt @db.Timestamp(0)
   task      Task[]
 }
+
+model Album {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(255)
+  description String?
+  createdAt   DateTime @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime @updatedAt @db.Timestamp(0)
+}
