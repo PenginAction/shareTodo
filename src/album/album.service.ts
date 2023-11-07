@@ -28,4 +28,12 @@ export class AlbumService {
       where: { id },
     });
   }
+
+  async deleteAlbum(id: number): Promise<Album> {
+    return await this.prismaService.album.delete({
+      where: {
+        id,
+      },
+    });
+  }
 }

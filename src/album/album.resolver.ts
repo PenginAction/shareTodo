@@ -1,4 +1,4 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AlbumService } from './album.service';
 import { Album as AlbumModel } from './models/album.model';
 import { CreateAlbumInput } from './dto/createAlbum.input';
@@ -26,5 +26,12 @@ export class AlbumResolver {
     @Args('updateAlbumInput') updateAlbumInput: UpdateAlbumInput,
   ): Promise<Album> {
     return await this.albumService.updateAlbum(updateAlbumInput);
+  }
+
+  @Mutation(() => AlbumModel)
+  async deleteAlbum(
+    @Args('id', { type: () => Int }) id: number,
+  ): Promise<Album> {
+    return await this.albumService.deleteAlbum(id);
   }
 }

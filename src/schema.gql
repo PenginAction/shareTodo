@@ -52,6 +52,7 @@ type Mutation {
   signIn(signInInput: SignInInput!): SignInResponse!
   createAlbum(createAlbumInput: CreateAlbumInput!): Album!
   updateAlbum(updateAlbumInput: UpdateAlbumInput!): Album!
+  deleteAlbum(id: Int!): Album!
 }
 
 input CreateTaskInput {
