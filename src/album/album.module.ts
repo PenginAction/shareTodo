@@ -3,6 +3,6 @@ import { AlbumResolver } from './album.resolver';
 import { AlbumService } from './album.service';
 
 @Module({
-  providers: [AlbumResolver, AlbumService]
+  providers: [AlbumResolver, AlbumService],
 })
 export class AlbumModule {}
