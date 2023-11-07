@@ -20,7 +20,7 @@ export class UserResolver {
 
   @Query(() => UserModel, { nullable: true })
   @UseGuards(JwtAuthGuard)
-  async getUser(@Args() getUserArgs: GetUserArgs): Promise<User> {
-    return await this.userService.getUser(getUserArgs.email);
+  async getUsers(@Args() getUserArgs: GetUserArgs): Promise<User> {
+    return await this.userService.getUsers(getUserArgs.email);
   }
 }
