@@ -1,22 +1,22 @@
 import { Injectable } from '@nestjs/common';
-import { Album } from './models/album.model';
 import { CreateAlbumInput } from './dto/createAlbum.input';
+import { PrismaService } from '../prisma/prisma.service';
+import { Album } from '@prisma/client';
 
 @Injectable()
 export class AlbumService {
-  albums: Album[] = [];
-
-  getAlbums(): Album[] {
-    return this.albums;
+  constructor(private readonly prismaService: PrismaService) {}
+  async getAlbums(): Promise<Album[]> {
+    return await this.prismaService.album.findMany();
   }
 
-  createAlbum(createAlbumInput: CreateAlbumInput): Album {
+  async createAlbum(createAlbumInput: CreateAlbumInput): Promise<Album> {
     const { title, description } = createAlbumInput;
-    const newAlbums = new Album();
-    newAlbums.id = this.albums.length + 1;
-    newAlbums.title = title;
-    newAlbums.description = description;
-    this.albums.push(newAlbums);
-    return newAlbums;
+    return await this.prismaService.album.create({
+      data: {
+        title,
+        description,
+      },
+    });
   }
 }

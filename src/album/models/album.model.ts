@@ -11,9 +11,9 @@ export class Album {
   @Field({ nullable: true })
   description: string;
 
-  // @Field()
-  // created_at: Date;
-  //
-  // @Field()
-  // updated_at: Date;
+  @Field()
+  createdAt: Date;
+
+  @Field()
+  updatedAt: Date;
 }
