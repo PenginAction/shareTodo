@@ -3,6 +3,7 @@ import { AlbumService } from './album.service';
 import { Album as AlbumModel } from './models/album.model';
 import { CreateAlbumInput } from './dto/createAlbum.input';
 import { Album } from '@prisma/client';
+import { UpdateAlbumInput } from './dto/updateAlbum.input';
 
 @Resolver()
 export class AlbumResolver {
@@ -18,5 +19,12 @@ export class AlbumResolver {
     @Args('createAlbumInput') createAlbumInput: CreateAlbumInput,
   ): Promise<Album> {
     return await this.albumService.createAlbum(createAlbumInput);
+  }
+
+  @Mutation(() => AlbumModel)
+  async updateAlbum(
+    @Args('updateAlbumInput') updateAlbumInput: UpdateAlbumInput,
+  ): Promise<Album> {
+    return await this.albumService.updateAlbum(updateAlbumInput);
   }
 }
