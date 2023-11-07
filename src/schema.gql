@@ -30,9 +30,16 @@ type SignInResponse {
   user: User!
 }
 
+type Album {
+  id: Int!
+  title: String!
+  description: String
+}
+
 type Query {
   getTasks(userId: Int!): [Task]!
-  getUser(email: String!): User
+  getUsers(email: String!): User
+  getAlbums: [Album]!
 }
 
 type Mutation {
@@ -41,6 +48,7 @@ type Mutation {
   deleteTask(id: Int!): Task!
   createUser(createUserInput: CreateUserInput!): User!
   signIn(signInInput: SignInInput!): SignInResponse!
+  createAlbum(title: String!, description: String): Album!
 }
 
 input CreateTaskInput {

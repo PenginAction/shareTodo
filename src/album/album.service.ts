@@ -6,11 +6,15 @@ export class AlbumService {
   albums: Album[] = [];
 
   getAlbums(): Album[] {
-    const album1 = new Album();
-    album1.id = 1;
-    album1.title = 'album1';
-    album1.description = 'album description 1';
-    this.albums.push(album1);
     return this.albums;
+  }
+
+  createAlbum(title: string, description?: string): Album {
+    const newAlbums = new Album();
+    newAlbums.id = this.albums.length + 1;
+    newAlbums.title = title;
+    newAlbums.description = description;
+    this.albums.push(newAlbums);
+    return newAlbums;
   }
 }

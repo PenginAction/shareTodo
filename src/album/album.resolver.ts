@@ -1,4 +1,4 @@
-import { Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AlbumService } from './album.service';
 import { Album } from './models/album.model';
 
@@ -9,5 +9,13 @@ export class AlbumResolver {
   @Query(() => [Album], { nullable: 'items' })
   getAlbums(): Album[] {
     return this.albumService.getAlbums();
+  }
+
+  @Mutation(() => Album)
+  createAlbum(
+    @Args('title') title: string,
+    @Args('description', { nullable: true }) description: string,
+  ): Album {
+    return this.albumService.createAlbum(title, description);
   }
 }
