@@ -48,7 +48,7 @@ type Mutation {
   deleteTask(id: Int!): Task!
   createUser(createUserInput: CreateUserInput!): User!
   signIn(signInInput: SignInInput!): SignInResponse!
-  createAlbum(title: String!, description: String): Album!
+  createAlbum(createAlbumInput: CreateAlbumInput!): Album!
 }
 
 input CreateTaskInput {
@@ -75,4 +75,9 @@ input CreateUserInput {
 input SignInInput {
   email: String!
   password: String!
+}
+
+input CreateAlbumInput {
+  title: String!
+  description: String
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Album } from './models/album.model';
+import { CreateAlbumInput } from './dto/createAlbum.input';
 
 @Injectable()
 export class AlbumService {
@@ -9,7 +10,8 @@ export class AlbumService {
     return this.albums;
   }
 
-  createAlbum(title: string, description?: string): Album {
+  createAlbum(createAlbumInput: CreateAlbumInput): Album {
+    const { title, description } = createAlbumInput;
     const newAlbums = new Album();
     newAlbums.id = this.albums.length + 1;
     newAlbums.title = title;
