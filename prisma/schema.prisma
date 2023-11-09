@@ -44,4 +44,14 @@ model Album {
   description String?
   createdAt   DateTime @default(now()) @db.Timestamp(0)
   updatedAt   DateTime @updatedAt @db.Timestamp(0)
+  photo       Photo[]
+}
+
+model Photo {
+  photoId   Int      @id @default(autoincrement())
+  filePath  String   @db.VarChar(255)
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @db.Timestamp(0)
+  albumId   Int
+  album     Album    @relation(fields: [albumId], references: [id], onDelete: Cascade)
 }

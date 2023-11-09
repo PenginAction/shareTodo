@@ -38,6 +38,14 @@ type Album {
   updatedAt: DateTime!
 }
 
+type Photo {
+  photoId: Int!
+  filePath: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  albumId: Int!
+}
+
 type Query {
   getTasks(userId: Int!): [Task]!
   getUsers(email: String!): User
@@ -53,6 +61,7 @@ type Mutation {
   createAlbum(createAlbumInput: CreateAlbumInput!): Album!
   updateAlbum(updateAlbumInput: UpdateAlbumInput!): Album!
   deleteAlbum(id: Int!): Album!
+  uploadPhoto(file: Upload!, albumId: Int!): Photo!
 }
 
 input CreateTaskInput {
@@ -91,3 +100,6 @@ input UpdateAlbumInput {
   title: String
   description: String
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload

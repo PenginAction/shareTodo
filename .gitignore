@@ -37,3 +37,4 @@ lerna-debug.log*
 docker
 .env
 memo
+storage.json
