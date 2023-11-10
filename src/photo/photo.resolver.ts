@@ -18,6 +18,18 @@ export class PhotoResolver {
   }
 
   @Mutation(() => Boolean)
+  async downloadPhotos(
+    @Args('albumId', { type: () => Int }) albumId: number,
+  ): Promise<boolean> {
+    try {
+      await this.photoService.downloadPhotos(albumId);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  @Mutation(() => Boolean)
   async deletePhotos(
     @Args('photoIds', { type: () => [Int] }) photoIds: number[],
     @Args('albumId', { type: () => Int }) albumId: number,

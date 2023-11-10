@@ -45,6 +45,25 @@ export class PhotoService {
     return Promise.all(uploadPromises);
   }
 
+  async downloadPhotos(albumId: number): Promise<void> {
+    const downloadDir = './downloads';
+    if (!fs.existsSync(downloadDir)) {
+      fs.mkdirSync(downloadDir);
+    }
+    const photos = await this.prismaService.photo.findMany({
+      where: { albumId },
+    });
+
+    await Promise.all(
+      photos.map(async (photo) => {
+        const filePath = photo.filePath;
+        const fileData = await fs.promises.readFile(filePath);
+        const newFilePath = path.join(downloadDir, path.basename(filePath));
+        await fs.promises.writeFile(newFilePath, fileData);
+      }),
+    );
+  }
+
   async deletePhotos(photoIds: number[], albumId: number): Promise<void> {
     await Promise.all(
       photoIds.map(async (photoId) => {
