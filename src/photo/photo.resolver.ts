@@ -9,11 +9,11 @@ import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 export class PhotoResolver {
   constructor(private readonly photoService: PhotoService) {}
 
-  @Mutation(() => PhotoModel)
-  async uploadPhoto(
-    @Args('file', { type: () => GraphQLUpload }) file: FileUpload,
+  @Mutation(() => [PhotoModel])
+  async uploadPhotos(
+    @Args('files', { type: () => [GraphQLUpload] }) files: FileUpload[],
     @Args('albumId', { type: () => Int }) albumId: number,
-  ): Promise<Photo> {
-    return await this.photoService.uploadPhoto(file, albumId);
+  ): Promise<Photo[]> {
+    return await this.photoService.uploadPhotos(files, albumId);
   }
 }

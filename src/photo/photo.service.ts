@@ -9,35 +9,39 @@ import { FileUpload } from './models/fileUpload.model';
 export class PhotoService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async uploadPhoto(file: FileUpload, albumId: number): Promise<Photo> {
-    const { createReadStream, filename } = file;
-
+  async uploadPhotos(files: FileUpload[], albumId: number): Promise<Photo[]> {
     const uploadDir = './uploads';
 
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir);
     }
 
-    const filePath = path.join(uploadDir, filename);
-    const stream = createReadStream();
+    const uploadPromises = files.map(async (filePromise) => {
+      const file = await filePromise;
+      const { createReadStream, filename } = file;
+      const filePath = path.join(uploadDir, filename);
+      const stream = createReadStream();
 
-    await new Promise((resolve, reject) => {
-      const writeStream = fs.createWriteStream(filePath);
-      writeStream.on('finish', resolve);
-      writeStream.on('error', (error) => {
-        fs.unlinkSync(filePath);
-        reject(error);
+      await new Promise((resolve, reject) => {
+        const writeStream = fs.createWriteStream(filePath);
+        writeStream.on('finish', resolve);
+        writeStream.on('error', (error) => {
+          fs.unlinkSync(filePath);
+          reject(error);
+        });
+        stream.pipe(writeStream);
       });
-      stream.pipe(writeStream);
+
+      return this.prismaService.photo.create({
+        data: {
+          filePath,
+          album: {
+            connect: { id: albumId },
+          },
+        },
+      });
     });
 
-    return this.prismaService.photo.create({
-      data: {
-        filePath,
-        album: {
-          connect: { id: albumId },
-        },
-      },
-    });
+    return Promise.all(uploadPromises);
   }
 }
