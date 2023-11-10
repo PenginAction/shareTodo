@@ -45,13 +45,30 @@ export class PhotoService {
     return Promise.all(uploadPromises);
   }
 
-  async deletePhotos(photoIds: number[]): Promise<Photo[]> {
-    return await Promise.all(
-      photoIds.map((photoId) =>
-        this.prismaService.photo.delete({
+  async deletePhotos(photoIds: number[], albumId: number): Promise<void> {
+    await Promise.all(
+      photoIds.map(async (photoId) => {
+        const photo = await this.prismaService.photo.findFirst({
+          where: {
+            photoId,
+            albumId,
+          },
+        });
+
+        if (!photo) {
+          throw new Error('Photo not found in the specified album');
+        }
+
+        const filePath = photo.filePath;
+
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+
+        await this.prismaService.photo.delete({
           where: { photoId },
-        }),
-      ),
+        });
+      }),
     );
   }
 }

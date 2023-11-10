@@ -62,7 +62,7 @@ type Mutation {
   updateAlbum(updateAlbumInput: UpdateAlbumInput!): Album!
   deleteAlbum(id: Int!): Album!
   uploadPhotos(files: [Upload!]!, albumId: Int!): [Photo!]!
-  deletePhotos(photoIds: [Int!]!): [Photo!]!
+  deletePhotos(photoIds: [Int!]!, albumId: Int!): Boolean!
 }
 
 input CreateTaskInput {
