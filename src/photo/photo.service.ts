@@ -45,9 +45,13 @@ export class PhotoService {
     return Promise.all(uploadPromises);
   }
 
-  async deletePhoto(photoId: number): Promise<Photo> {
-    return await this.prismaService.photo.delete({
-      where: { photoId },
-    });
+  async deletePhotos(photoIds: number[]): Promise<Photo[]> {
+    return await Promise.all(
+      photoIds.map((photoId) =>
+        this.prismaService.photo.delete({
+          where: { photoId },
+        }),
+      ),
+    );
   }
 }

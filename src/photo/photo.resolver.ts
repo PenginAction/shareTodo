@@ -17,10 +17,10 @@ export class PhotoResolver {
     return await this.photoService.uploadPhotos(files, albumId);
   }
 
-  @Mutation(() => PhotoModel)
-  async deletePhoto(
-    @Args('photoId', { type: () => Int }) photoId: number,
-  ): Promise<Photo> {
-    return await this.photoService.deletePhoto(photoId);
+  @Mutation(() => [PhotoModel])
+  async deletePhotos(
+    @Args('photoIds', { type: () => [Int] }) photoIds: number[],
+  ): Promise<Photo[]> {
+    return await this.photoService.deletePhotos(photoIds);
   }
 }
