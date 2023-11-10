@@ -39,3 +39,4 @@ docker
 memo
 storage.json
 uploads/*
+downloads/*
