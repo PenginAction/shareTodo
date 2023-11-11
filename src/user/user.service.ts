@@ -28,4 +28,14 @@ export class UserService {
       },
     });
   }
+
+  async findOrCreateUser(createUserInput: CreateUserInput): Promise<User> {
+    let user = await this.getUsers(createUserInput.email);
+
+    if (!user) {
+      user = await this.createUser(createUserInput);
+    }
+
+    return user;
+  }
 }

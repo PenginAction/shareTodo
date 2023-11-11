@@ -25,4 +25,10 @@ export class AuthService {
     const payload: JwtPayload = { email: user.email, sub: user.id };
     return { accessToken: this.jwtService.sign(payload), user };
   }
+
+  async signInWithGoogle(googleUser: any): Promise<SignInResponse> {
+    const user = await this.userService.findOrCreateUser(googleUser);
+    const payload: JwtPayload = { email: user.email, sub: user.id };
+    return { accessToken: this.jwtService.sign(payload), user };
+  }
 }

@@ -4,6 +4,8 @@ import { Album as AlbumModel } from './models/album.model';
 import { CreateAlbumInput } from './dto/createAlbum.input';
 import { Album } from '@prisma/client';
 import { UpdateAlbumInput } from './dto/updateAlbum.input';
+import {UseGuards} from "@nestjs/common";
+import {JwtAuthGuard} from "../auth/guards/jwtAuth.guard";
 
 @Resolver()
 export class AlbumResolver {
@@ -17,6 +19,7 @@ export class AlbumResolver {
   }
 
   @Mutation(() => AlbumModel)
+  @UseGuards(JwtAuthGuard)
   async createAlbum(
     @Args('createAlbumInput') createAlbumInput: CreateAlbumInput,
   ): Promise<Album> {
@@ -24,6 +27,7 @@ export class AlbumResolver {
   }
 
   @Mutation(() => AlbumModel)
+  @UseGuards(JwtAuthGuard)
   async updateAlbum(
     @Args('updateAlbumInput') updateAlbumInput: UpdateAlbumInput,
   ): Promise<Album> {
@@ -31,6 +35,7 @@ export class AlbumResolver {
   }
 
   @Mutation(() => AlbumModel)
+  @UseGuards(JwtAuthGuard)
   async deleteAlbum(
     @Args('id', { type: () => Int }) id: number,
   ): Promise<Album> {

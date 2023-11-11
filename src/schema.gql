@@ -58,6 +58,7 @@ type Mutation {
   deleteTask(id: Int!): Task!
   createUser(createUserInput: CreateUserInput!): User!
   signIn(signInInput: SignInInput!): SignInResponse!
+  signInWithGoogle(googleUser: GoogleSignInInput!): SignInResponse!
   createAlbum(createAlbumInput: CreateAlbumInput!): Album!
   updateAlbum(updateAlbumInput: UpdateAlbumInput!): Album!
   deleteAlbum(id: Int!): Album!
@@ -90,6 +91,10 @@ input CreateUserInput {
 input SignInInput {
   email: String!
   password: String!
+}
+
+input GoogleSignInInput {
+  token: String!
 }
 
 input CreateAlbumInput {
