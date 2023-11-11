@@ -88,11 +88,12 @@ export class PhotoService {
           throw new Error('Photo not found in the specified album');
         }
 
-        const filePath = photo.filePath;
+        const gcFilePath = photo.filePath.replace(
+          `https://storage.googleapis.com/${this.bucketName}/`,
+          '',
+        );
 
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath);
-        }
+        await this.storage.bucket(this.bucketName).file(gcFilePath).delete();
 
         await this.prismaService.photo.delete({
           where: { photoId },
