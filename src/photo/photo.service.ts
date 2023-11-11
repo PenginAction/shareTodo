@@ -56,10 +56,20 @@ export class PhotoService {
 
     await Promise.all(
       photos.map(async (photo) => {
-        const filePath = photo.filePath;
-        const fileData = await fs.promises.readFile(filePath);
-        const newFilePath = path.join(downloadDir, path.basename(filePath));
-        await fs.promises.writeFile(newFilePath, fileData);
+        const gcFilePath = photo.filePath.replace(
+          `https://storage.googleapis.com/${this.bucketName}/`,
+          '',
+        );
+        const localFilePath = path.join(downloadDir, path.basename(gcFilePath));
+        await new Promise((resolve, reject) => {
+          const blob = this.storage.bucket(this.bucketName).file(gcFilePath);
+          const blobStream = blob.createReadStream();
+          const fileStream = fs.createWriteStream(localFilePath);
+
+          blobStream.on('error', reject);
+          blobStream.on('end', resolve);
+          blobStream.pipe(fileStream);
+        });
       }),
     );
   }
