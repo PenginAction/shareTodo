@@ -4,37 +4,37 @@ import * as fs from 'fs';
 import { Photo } from '@prisma/client';
 import * as path from 'path';
 import { FileUpload } from './models/fileUpload.model';
+import { Storage } from '@google-cloud/storage';
+import * as process from 'process';
 
 @Injectable()
 export class PhotoService {
-  constructor(private readonly prismaService: PrismaService) {}
+  private storage: Storage;
+  private bucketName = process.env.GCLOUD_STORAGE_BUCKET;
+  constructor(private readonly prismaService: PrismaService) {
+    this.storage = new Storage({ keyFilename: 'storage.json' });
+  }
 
   async uploadPhotos(files: FileUpload[], albumId: number): Promise<Photo[]> {
-    const uploadDir = './uploads';
-
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir);
-    }
-
     const uploadPromises = files.map(async (filePromise) => {
       const file = await filePromise;
       const { createReadStream, filename } = file;
-      const filePath = path.join(uploadDir, filename);
+      const gcFileName = `${filename}`;
       const stream = createReadStream();
 
       await new Promise((resolve, reject) => {
-        const writeStream = fs.createWriteStream(filePath);
-        writeStream.on('finish', resolve);
-        writeStream.on('error', (error) => {
-          fs.unlinkSync(filePath);
-          reject(error);
-        });
-        stream.pipe(writeStream);
+        const blob = this.storage.bucket(this.bucketName).file(gcFileName);
+        const blobStream = blob.createWriteStream();
+        blobStream.on('finish', resolve);
+        blobStream.on('error', reject);
+        stream.pipe(blobStream);
       });
+
+      const publicUrl = `https://storage.googleapis.com/${this.bucketName}/${gcFileName}`;
 
       return this.prismaService.photo.create({
         data: {
-          filePath,
+          filePath: publicUrl,
           album: {
             connect: { id: albumId },
           },
