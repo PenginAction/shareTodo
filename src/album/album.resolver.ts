@@ -4,8 +4,8 @@ import { Album as AlbumModel } from './models/album.model';
 import { CreateAlbumInput } from './dto/createAlbum.input';
 import { Album } from '@prisma/client';
 import { UpdateAlbumInput } from './dto/updateAlbum.input';
-import {UseGuards} from "@nestjs/common";
-import {JwtAuthGuard} from "../auth/guards/jwtAuth.guard";
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/jwtAuth.guard';
 
 @Resolver()
 export class AlbumResolver {

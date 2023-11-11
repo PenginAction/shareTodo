@@ -4,8 +4,8 @@ import { Photo as PhotoModel } from './models/photo.model';
 import { Photo } from '@prisma/client';
 import { FileUpload } from './models/fileUpload.model';
 import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
-import {UseGuards} from "@nestjs/common";
-import {JwtAuthGuard} from "../auth/guards/jwtAuth.guard";
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/jwtAuth.guard';
 
 @Resolver()
 export class PhotoResolver {
