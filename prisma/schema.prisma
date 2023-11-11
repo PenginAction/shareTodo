@@ -36,6 +36,7 @@ model User {
   createdAt DateTime @default(now()) @db.Timestamp(0)
   updatedAt DateTime @updatedAt @db.Timestamp(0)
   task      Task[]
+  album     Album[]
 }
 
 model Album {
@@ -45,6 +46,8 @@ model Album {
   createdAt   DateTime @default(now()) @db.Timestamp(0)
   updatedAt   DateTime @updatedAt @db.Timestamp(0)
   photo       Photo[]
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Photo {

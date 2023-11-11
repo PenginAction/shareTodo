@@ -10,8 +10,10 @@ export class AlbumResolver {
   constructor(private readonly albumService: AlbumService) {}
 
   @Query(() => [AlbumModel], { nullable: 'items' })
-  async getAlbums(): Promise<Album[]> {
-    return await this.albumService.getAlbums();
+  async getAlbums(
+    @Args('userId', { type: () => Int }) userId: number,
+  ): Promise<Album[]> {
+    return await this.albumService.getAlbums(userId);
   }
 
   @Mutation(() => AlbumModel)

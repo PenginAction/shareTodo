@@ -7,16 +7,20 @@ import { UpdateAlbumInput } from './dto/updateAlbum.input';
 @Injectable()
 export class AlbumService {
   constructor(private readonly prismaService: PrismaService) {}
-  async getAlbums(): Promise<Album[]> {
-    return await this.prismaService.album.findMany();
+
+  async getAlbums(userId: number): Promise<Album[]> {
+    return await this.prismaService.album.findMany({
+      where: { userId },
+    });
   }
 
   async createAlbum(createAlbumInput: CreateAlbumInput): Promise<Album> {
-    const { title, description } = createAlbumInput;
+    const { title, description, userId } = createAlbumInput;
     return await this.prismaService.album.create({
       data: {
         title,
         description,
+        userId,
       },
     });
   }
