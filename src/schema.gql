@@ -75,6 +75,7 @@ type Mutation {
   downloadPhotos(albumId: Int!): Boolean!
   deletePhotos(photoIds: [Int!]!, albumId: Int!): Boolean!
   sendFriendRequest(sendFriendRequest: SendFriendRequestInput!): FriendRequest!
+  respondToFriendRequest(respondToFriendRequestInput: RespondToFriendRequestInput!): FriendRequest!
 }
 
 input CreateTaskInput {
@@ -125,4 +126,10 @@ scalar Upload
 input SendFriendRequestInput {
   fromId: Int!
   toId: Int!
+}
+
+input RespondToFriendRequestInput {
+  requestId: Int!
+  toId: Int!
+  status: String!
 }
