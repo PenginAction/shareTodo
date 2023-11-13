@@ -12,6 +12,20 @@ export class FriendService {
     sendFriendRequestInput: SendFriendRequestInput,
   ): Promise<FriendRequest> {
     const { fromId, toId } = sendFriendRequestInput;
+    const existingRequest = await this.prismaService.friendRequest.findFirst({
+      where: {
+        fromId,
+        toId,
+        status: {
+          not: 'REJECTED',
+        },
+      },
+    });
+
+    if (existingRequest) {
+      throw new Error('A peding or accepted friend request already exists');
+    }
+
     return await this.prismaService.friendRequest.create({
       data: {
         fromId,
