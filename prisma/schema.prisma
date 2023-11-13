@@ -29,14 +29,31 @@ enum Status {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String   @db.VarChar(255)
-  email     String   @unique @db.VarChar(255)
-  password  String   @db.VarChar(255)
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @updatedAt @db.Timestamp(0)
-  task      Task[]
-  album     Album[]
+  id                   Int             @id @default(autoincrement())
+  name                 String          @db.VarChar(255)
+  email                String          @unique @db.VarChar(255)
+  password             String          @db.VarChar(255)
+  createdAt            DateTime        @default(now()) @db.Timestamp(0)
+  updatedAt            DateTime        @updatedAt @db.Timestamp(0)
+  task                 Task[]
+  album                Album[]
+  fiendRequestSent     FriendRequest[] @relation("requestFrom")
+  fiendRequestReceived FriendRequest[] @relation("requestTo")
+}
+
+model FriendRequest {
+  id     Int                 @id @default(autoincrement())
+  from   User                @relation("requestFrom", fields: [fromId], references: [id])
+  fromId Int
+  to     User                @relation("requestTo", fields: [toId], references: [id])
+  toId   Int
+  status FriendRequestStatus @default(PENDING)
+}
+
+enum FriendRequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
 }
 
 model Album {
