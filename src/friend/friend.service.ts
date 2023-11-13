@@ -47,7 +47,7 @@ export class FriendService {
     });
 
     if (!request || request.toId != toId) {
-      throw new Error('Invaild request or permission denied');
+      throw new Error('Invalid request or permission denied');
     }
     return await this.prismaService.friendRequest.update({
       where: { id: requestId },
