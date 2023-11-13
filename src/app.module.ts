@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { AlbumModule } from './album/album.module';
 import { PhotoModule } from './photo/photo.module';
 import { ConfigModule } from '@nestjs/config';
+import { FriendModule } from './friend/friend.module';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 
 @Module({
@@ -28,6 +29,7 @@ import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
     AuthModule,
     AlbumModule,
     PhotoModule,
+    FriendModule,
   ],
 })
 export class AppModule {

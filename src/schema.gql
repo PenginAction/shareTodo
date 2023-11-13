@@ -46,6 +46,15 @@ type Photo {
   albumId: Int!
 }
 
+type FriendRequest {
+  id: Int!
+  from: User!
+  fromId: Int!
+  to: User!
+  toId: Int!
+  status: String!
+}
+
 type Query {
   getTasks(userId: Int!): [Task]!
   getUsers(email: String!): User
@@ -65,6 +74,7 @@ type Mutation {
   uploadPhotos(files: [Upload!]!, albumId: Int!): [Photo!]!
   downloadPhotos(albumId: Int!): Boolean!
   deletePhotos(photoIds: [Int!]!, albumId: Int!): Boolean!
+  sendFriendRequest(sendFriendRequest: SendFriendRequestInput!): FriendRequest!
 }
 
 input CreateTaskInput {
@@ -111,3 +121,8 @@ input UpdateAlbumInput {
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
+
+input SendFriendRequestInput {
+  fromId: Int!
+  toId: Int!
+}
