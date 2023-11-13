@@ -1,4 +1,4 @@
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { FriendService } from './friend.service';
 import { FriendRequest as FriendRequestModel } from './models/friendRequest.models';
 import { SendFriendRequestInput } from './dto/sendFriendRequest.input';
@@ -10,6 +10,21 @@ import { RespondToFriendRequestInput } from './dto/respondToFriendRequest.input'
 @Resolver()
 export class FriendResolver {
   constructor(private readonly friendService: FriendService) {}
+
+  @Query(() => [FriendRequestModel])
+  @UseGuards(JwtAuthGuard)
+  async getFriendRequests(
+    @Args('userId', { type: () => Int }) userId: number,
+    @Context() context,
+  ): Promise<FriendRequest[]> {
+    const user: User = context.req.user;
+    if (userId !== user.id) {
+      throw new UnauthorizedException(
+        'Cannot gain get friend request(PENDING) on behalf of another user.',
+      );
+    }
+    return this.friendService.getFriendRequests(userId);
+  }
 
   @Mutation(() => FriendRequestModel)
   @UseGuards(JwtAuthGuard)

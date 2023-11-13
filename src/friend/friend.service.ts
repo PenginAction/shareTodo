@@ -8,6 +8,15 @@ import { RespondToFriendRequestInput } from './dto/respondToFriendRequest.input'
 export class FriendService {
   constructor(private readonly prismaService: PrismaService) {}
 
+  async getFriendRequests(userId: number): Promise<FriendRequest[]> {
+    return await this.prismaService.friendRequest.findMany({
+      where: {
+        toId: userId,
+        status: 'PENDING',
+      },
+    });
+  }
+
   async sendFriendRequest(
     sendFriendRequestInput: SendFriendRequestInput,
   ): Promise<FriendRequest> {

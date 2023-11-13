@@ -59,6 +59,7 @@ type Query {
   getTasks(userId: Int!): [Task]!
   getUsers(email: String!): User
   getAlbums(userId: Int!): [Album]!
+  getFriendRequests(userId: Int!): [FriendRequest!]!
 }
 
 type Mutation {
