@@ -73,4 +73,14 @@ export class FriendResolver {
       respondToFriendRequestInput,
     );
   }
+
+  @Mutation(() => Boolean)
+  @UseGuards(JwtAuthGuard)
+  async deleteFriendRequest(
+    @Args('requestId', { type: () => Int }) requestId: number,
+    @Context() context,
+  ): Promise<boolean> {
+    const user: User = context.req.user;
+    return this.friendService.deleteFriendRequest(user.id, requestId);
+  }
 }

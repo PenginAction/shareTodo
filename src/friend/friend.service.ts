@@ -81,4 +81,23 @@ export class FriendService {
       },
     });
   }
+
+  async deleteFriendRequest(
+    userId: number,
+    requestId: number,
+  ): Promise<boolean> {
+    const request = await this.prismaService.friendRequest.findUnique({
+      where: { id: requestId },
+    });
+
+    if (!request || request.toId !== userId) {
+      throw new Error('Request not found or permission denied');
+    }
+
+    await this.prismaService.friendRequest.delete({
+      where: { id: requestId },
+    });
+
+    return true;
+  }
 }

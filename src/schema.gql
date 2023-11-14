@@ -78,6 +78,7 @@ type Mutation {
   deletePhotos(photoIds: [Int!]!, albumId: Int!): Boolean!
   sendFriendRequest(sendFriendRequest: SendFriendRequestInput!): FriendRequest!
   respondToFriendRequest(respondToFriendRequestInput: RespondToFriendRequestInput!): FriendRequest!
+  deleteFriendRequest(requestId: Int!): Boolean!
 }
 
 input CreateTaskInput {
