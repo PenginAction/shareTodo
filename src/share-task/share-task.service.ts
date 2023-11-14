@@ -1,7 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { SharedTask } from '@prisma/client';
 import { ShareTaskWithFriendInput } from './dto/shareTaskWithFriend.input';
+import { UnshareTaskInput } from './dto/unshareTaskInput';
 
 @Injectable()
 export class ShareTaskService {
@@ -42,5 +47,39 @@ export class ShareTaskService {
         userId: friendId,
       },
     });
+  }
+
+  async unshareTask(
+    userId: number,
+    unshareTaskInput: UnshareTaskInput,
+  ): Promise<boolean> {
+    const { taskId, friendId } = unshareTaskInput;
+
+    const sharedTask = await this.prismaService.sharedTask.findFirst({
+      where: {
+        taskId: taskId,
+        userId: friendId,
+      },
+    });
+
+    if (!sharedTask) {
+      throw new NotFoundException('Shared task not found');
+    }
+
+    const task = await this.prismaService.task.findUnique({
+      where: { id: taskId },
+    });
+
+    if (!task || task.userId !== userId) {
+      throw new UnauthorizedException(
+        'You do not have permission to unshare this task',
+      );
+    }
+
+    await this.prismaService.sharedTask.delete({
+      where: { id: sharedTask.id },
+    });
+
+    return true;
   }
 }

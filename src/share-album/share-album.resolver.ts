@@ -5,6 +5,7 @@ import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwtAuth.guard';
 import { ShareAlbumWithFriendInput } from './dto/shareAlbumWithFriend.input';
 import { SharedAlbum, User } from '@prisma/client';
+import { UnshareAlbumInput } from './dto/unshareAlbumInput';
 
 @Resolver()
 export class ShareAlbumResolver {
@@ -22,6 +23,21 @@ export class ShareAlbumResolver {
     return await this.shareAlbumService.shareAlbumWithFriend(
       user.id,
       shareAlbumWithInput,
+    );
+  }
+
+  @Mutation(() => Boolean)
+  @UseGuards(JwtAuthGuard)
+  async unshareAlbum(
+    @Args('unshareAlbumInput')
+    unshareAlbumInput: UnshareAlbumInput,
+    @Context() context,
+  ): Promise<boolean> {
+    const user: User = context.req.user;
+
+    return await this.shareAlbumService.unshareAlbum(
+      user.id,
+      unshareAlbumInput,
     );
   }
 }

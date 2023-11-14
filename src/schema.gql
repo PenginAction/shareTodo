@@ -92,7 +92,9 @@ type Mutation {
   respondToFriendRequest(respondToFriendRequestInput: RespondToFriendRequestInput!): FriendRequest!
   deleteFriendRequest(requestId: Int!): Boolean!
   shareAlbumWithFriend(shareAlbumWithFriendInput: ShareAlbumWithFriendInput!): ShareAlbum!
+  unshareAlbum(unshareAlbumInput: UnshareAlbumInput!): Boolean!
   shareTaskWithFriend(shareTaskWithFriendInput: ShareTaskWithFriendInput!): ShareTask!
+  unshareTask(unshareTaskInput: UnshareTaskInput!): Boolean!
 }
 
 input CreateTaskInput {
@@ -156,7 +158,17 @@ input ShareAlbumWithFriendInput {
   friendId: Int!
 }
 
+input UnshareAlbumInput {
+  albumId: Int!
+  friendId: Int!
+}
+
 input ShareTaskWithFriendInput {
+  taskId: Int!
+  friendId: Int!
+}
+
+input UnshareTaskInput {
   taskId: Int!
   friendId: Int!
 }

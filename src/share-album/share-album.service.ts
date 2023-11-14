@@ -1,7 +1,13 @@
 import { SharedAlbum } from '@prisma/client';
 import { ShareAlbumWithFriendInput } from './dto/shareAlbumWithFriend.input';
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { UnshareTaskInput } from '../share-task/dto/unshareTaskInput';
+import { UnshareAlbumInput } from './dto/unshareAlbumInput';
 
 @Injectable()
 export class ShareAlbumService {
@@ -44,5 +50,39 @@ export class ShareAlbumService {
         userId: friendId,
       },
     });
+  }
+
+  async unshareAlbum(
+    userId: number,
+    unshareAlbumInput: UnshareAlbumInput,
+  ): Promise<boolean> {
+    const { albumId, friendId } = unshareAlbumInput;
+
+    const sharedAlbum = await this.prismaService.sharedAlbum.findFirst({
+      where: {
+        albumId: albumId,
+        userId: friendId,
+      },
+    });
+
+    if (!sharedAlbum) {
+      throw new NotFoundException('Shared album not found');
+    }
+
+    const album = await this.prismaService.album.findUnique({
+      where: { id: albumId },
+    });
+
+    if (!album || album.userId !== userId) {
+      throw new UnauthorizedException(
+        'You do not have permission to unshare this album',
+      );
+    }
+
+    await this.prismaService.sharedAlbum.delete({
+      where: { id: sharedAlbum.id },
+    });
+
+    return true;
   }
 }

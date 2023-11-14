@@ -5,6 +5,7 @@ import { SharedTask, User } from '@prisma/client';
 import { ShareTaskService } from './share-task.service';
 import { ShareTask } from './models/shareTask.model';
 import { ShareTaskWithFriendInput } from './dto/shareTaskWithFriend.input';
+import { UnshareTaskInput } from './dto/unshareTaskInput';
 
 @Resolver()
 export class ShareTaskResolver {
@@ -22,6 +23,21 @@ export class ShareTaskResolver {
     return await this.shareTaskService.shareTaskWithFriend(
       user.id,
       sharetaskWithInput,
+    );
+  }
+
+  @Mutation(() => Boolean)
+  @UseGuards(JwtAuthGuard)
+  async unshareTask(
+    @Args('unshareTaskInput')
+    unshareTaskInput: UnshareTaskInput,
+    @Context() context,
+  ): Promise<boolean> {
+    const user: User = context.req.user;
+
+    return await this.shareTaskService.unshareTask(
+      user.id,
+      unshareTaskInput,
     );
   }
 }
