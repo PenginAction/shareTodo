@@ -67,6 +67,11 @@ export class FriendService {
     if (!request || request.toId != toId) {
       throw new Error('Invalid request or permission denied');
     }
+
+    if (request.status !== 'PENDING') {
+      throw new Error('Cannot modify a non-pending friend request');
+    }
+
     return await this.prismaService.friendRequest.update({
       where: { id: requestId },
       data: { status },
