@@ -12,6 +12,7 @@ import { PhotoModule } from './photo/photo.module';
 import { ConfigModule } from '@nestjs/config';
 import { FriendModule } from './friend/friend.module';
 import { ShareAlbumModule } from './share-album/share-album.module';
+import { ShareTaskModule } from './share-task/share-task.module';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 
 @Module({
@@ -32,6 +33,7 @@ import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
     PhotoModule,
     FriendModule,
     ShareAlbumModule,
+    ShareTaskModule,
   ],
 })
 export class AppModule {
