@@ -17,6 +17,15 @@ export class FriendService {
     });
   }
 
+  async getFriendStatusList(userId: number): Promise<FriendRequest[]> {
+    return await this.prismaService.friendRequest.findMany({
+      where: {
+        toId: userId,
+        status: 'ACCEPTED',
+      },
+    });
+  }
+
   async sendFriendRequest(
     sendFriendRequestInput: SendFriendRequestInput,
   ): Promise<FriendRequest> {

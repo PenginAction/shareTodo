@@ -60,6 +60,7 @@ type Query {
   getUsers(email: String!): User
   getAlbums(userId: Int!): [Album]!
   getFriendRequests(userId: Int!): [FriendRequest!]!
+  getFriendList(userId: Int!): [FriendRequest!]!
 }
 
 type Mutation {

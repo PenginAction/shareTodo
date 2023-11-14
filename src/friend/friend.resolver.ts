@@ -26,6 +26,21 @@ export class FriendResolver {
     return this.friendService.getFriendRequests(userId);
   }
 
+  @Query(() => [FriendRequestModel])
+  @UseGuards(JwtAuthGuard)
+  async getFriendList(
+    @Args('userId', { type: () => Int }) userId: number,
+    @Context() context,
+  ): Promise<FriendRequest[]> {
+    const user: User = context.req.user;
+    if (userId !== user.id) {
+      throw new UnauthorizedException(
+        'Cannot gain get friend list on behalf of another user.',
+      );
+    }
+    return this.friendService.getFriendStatusList(userId);
+  }
+
   @Mutation(() => FriendRequestModel)
   @UseGuards(JwtAuthGuard)
   async sendFriendRequest(
