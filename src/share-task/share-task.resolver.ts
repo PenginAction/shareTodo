@@ -35,9 +35,6 @@ export class ShareTaskResolver {
   ): Promise<boolean> {
     const user: User = context.req.user;
 
-    return await this.shareTaskService.unshareTask(
-      user.id,
-      unshareTaskInput,
-    );
+    return await this.shareTaskService.unshareTask(user.id, unshareTaskInput);
   }
 }

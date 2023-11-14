@@ -6,7 +6,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { UnshareTaskInput } from '../share-task/dto/unshareTaskInput';
 import { UnshareAlbumInput } from './dto/unshareAlbumInput';
 
 @Injectable()
