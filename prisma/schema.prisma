@@ -11,15 +11,16 @@ datasource db {
 }
 
 model Task {
-  id          Int      @id @default(autoincrement())
-  name        String   @db.VarChar(255)
-  dueDate     String   @db.VarChar(10)
-  status      Status   @default(NOT_STARTED)
+  id          Int          @id @default(autoincrement())
+  name        String       @db.VarChar(255)
+  dueDate     String       @db.VarChar(10)
+  status      Status       @default(NOT_STARTED)
   description String?
-  createdAt   DateTime @default(now()) @db.Timestamp(0)
-  updatedAt   DateTime @updatedAt @db.Timestamp(0)
+  createdAt   DateTime     @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime     @updatedAt @db.Timestamp(0)
   userId      Int
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  SharedTask  SharedTask[]
 }
 
 enum Status {
@@ -39,6 +40,8 @@ model User {
   album                Album[]
   fiendRequestSent     FriendRequest[] @relation("requestFrom")
   fiendRequestReceived FriendRequest[] @relation("requestTo")
+  SharedAlbum          SharedAlbum[]
+  SharedTask           SharedTask[]
 }
 
 model FriendRequest {
@@ -57,14 +60,15 @@ enum FriendRequestStatus {
 }
 
 model Album {
-  id          Int      @id @default(autoincrement())
-  title       String   @db.VarChar(255)
+  id          Int           @id @default(autoincrement())
+  title       String        @db.VarChar(255)
   description String?
-  createdAt   DateTime @default(now()) @db.Timestamp(0)
-  updatedAt   DateTime @updatedAt @db.Timestamp(0)
+  createdAt   DateTime      @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime      @updatedAt @db.Timestamp(0)
   photo       Photo[]
   userId      Int
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  SharedAlbum SharedAlbum[]
 }
 
 model Photo {
@@ -74,4 +78,24 @@ model Photo {
   updatedAt DateTime @updatedAt @db.Timestamp(0)
   albumId   Int
   album     Album    @relation(fields: [albumId], references: [id], onDelete: Cascade)
+}
+
+model SharedAlbum {
+  id      Int   @id @default(autoincrement())
+  albumId Int
+  userId  Int
+  album   Album @relation(fields: [albumId], references: [id])
+  user    User  @relation(fields: [userId], references: [id])
+
+  @@unique([albumId, userId])
+}
+
+model SharedTask {
+  id     Int  @id @default(autoincrement())
+  taskId Int
+  userId Int
+  task   Task @relation(fields: [taskId], references: [id])
+  user   User @relation(fields: [userId], references: [id])
+
+  @@unique([taskId, userId])
 }

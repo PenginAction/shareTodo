@@ -55,6 +55,12 @@ type FriendRequest {
   status: String!
 }
 
+type ShareAlbum {
+  id: Int!
+  albumId: Int!
+  userId: Int!
+}
+
 type Query {
   getTasks(userId: Int!): [Task]!
   getUsers(email: String!): User
@@ -79,6 +85,7 @@ type Mutation {
   sendFriendRequest(sendFriendRequest: SendFriendRequestInput!): FriendRequest!
   respondToFriendRequest(respondToFriendRequestInput: RespondToFriendRequestInput!): FriendRequest!
   deleteFriendRequest(requestId: Int!): Boolean!
+  shareAlbumWithFriend(shareAlbumWithFriendInput: ShareAlbumWithFriendInput!): ShareAlbum!
 }
 
 input CreateTaskInput {
@@ -135,4 +142,9 @@ input RespondToFriendRequestInput {
   requestId: Int!
   toId: Int!
   status: String!
+}
+
+input ShareAlbumWithFriendInput {
+  albumId: Int!
+  friendId: Int!
 }
