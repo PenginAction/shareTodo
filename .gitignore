@@ -40,3 +40,4 @@ memo
 storage.json
 uploads/*
 downloads/*
+coverage
