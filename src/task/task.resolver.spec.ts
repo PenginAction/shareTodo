@@ -7,6 +7,11 @@ describe('TaskResolverTest', () => {
   let taskResolver: TaskResolver;
   let taskService: TaskService;
 
+  function isValidDateFormat(dateStr: string): boolean {
+    const regex = /^\d{4}-\d{2}-\d{2}$/;
+    return regex.test(dateStr);
+  }
+
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [
@@ -29,19 +34,38 @@ describe('TaskResolverTest', () => {
                 status: Status.IN_PROGRESS,
               },
             ]),
-            createTask: jest.fn().mockResolvedValue({
-              id: 1,
-              name: 'Task1',
-              userId: 1,
-              description: 'desc',
-              dueDate: '2023-01-01',
+            createTask: jest.fn((input) => {
+              if (!input.name) {
+                return Promise.reject(new Error('Name is empty'));
+              }
+              if (!input.dueDate || !isValidDateFormat(input.dueDate)) {
+                return Promise.reject(
+                  new Error('dueDate is not in yyyy-mm-dd format'),
+                );
+              }
+              return Promise.resolve({
+                id: 1,
+                name: 'Task1',
+                dueDate: '2023-01-01',
+                description: 'desc',
+              });
             }),
-            updateTask: jest.fn().mockResolvedValue({
-              id: 1,
-              name: 'Task1',
-              dueDate: '2023-01-02',
-              status: Status.IN_PROGRESS,
-              description: 'desc',
+            updateTask: jest.fn((input) => {
+              if (!input.name) {
+                return Promise.reject(new Error('Name is empty'));
+              }
+              if (!input.dueDate || !isValidDateFormat(input.dueDate)) {
+                return Promise.reject(
+                  new Error('dueDate is not in yyyy-mm-dd format'),
+                );
+              }
+              return Promise.resolve({
+                id: 1,
+                name: 'Task1',
+                dueDate: '2023-01-02',
+                status: Status.IN_PROGRESS,
+                description: 'desc',
+              });
             }),
             deleteTask: jest.fn().mockResolvedValue({
               id: 1,
@@ -93,14 +117,55 @@ describe('TaskResolverTest', () => {
     it('Valid', async () => {
       const createTaskInput = {
         name: 'Task1',
-        userId: 1,
-        description: 'desc',
         dueDate: '2023-01-01',
+        description: 'desc',
+        userId: 1,
       };
-      const expected = { id: 1, ...createTaskInput };
+      const expected = {
+        id: 1,
+        name: 'Task1',
+        dueDate: '2023-01-01',
+        description: 'desc',
+      };
 
       const result = await taskResolver.createTask(createTaskInput);
       expect(result).toEqual(expected);
+    });
+
+    it('should fail validation for name is empty', async () => {
+      const createTaskInput = {
+        name: '',
+        dueDate: '2023-01-01',
+        description: 'desc',
+        userId: 1,
+      };
+      const expected = { id: 1, ...createTaskInput };
+
+      await expect(taskResolver.createTask(expected)).rejects.toThrow();
+    });
+
+    it('should fail validation for not format', async () => {
+      const createTaskInput = {
+        name: 'Task1',
+        dueDate: '202311',
+        description: 'desc',
+        userId: 1,
+      };
+      const expected = { id: 1, ...createTaskInput };
+
+      await expect(taskResolver.createTask(expected)).rejects.toThrow();
+    });
+
+    it('should fail validation for dueDate is empty', async () => {
+      const createTaskInput = {
+        name: 'Task1',
+        dueDate: '',
+        description: 'desc',
+        userId: 1,
+      };
+      const expected = { id: 1, ...createTaskInput };
+
+      await expect(taskResolver.createTask(expected)).rejects.toThrow();
     });
   });
 
@@ -117,6 +182,42 @@ describe('TaskResolverTest', () => {
 
       const result = await taskResolver.updateTask(updateTaskInput);
       expect(result).toEqual(expected);
+    });
+
+    it('should fail validation for name is empty', async () => {
+      const createTaskInput = {
+        name: '',
+        dueDate: '2023-01-01',
+        description: 'desc',
+        userId: 1,
+      };
+      const expected = { id: 1, ...createTaskInput };
+
+      await expect(taskResolver.createTask(expected)).rejects.toThrow();
+    });
+
+    it('should fail validation for not format', async () => {
+      const createTaskInput = {
+        name: 'Task1',
+        dueDate: '202311',
+        description: 'desc',
+        userId: 1,
+      };
+      const expected = { id: 1, ...createTaskInput };
+
+      await expect(taskResolver.createTask(expected)).rejects.toThrow();
+    });
+
+    it('should fail validation for dueDate is empty', async () => {
+      const createTaskInput = {
+        name: 'Task1',
+        dueDate: '',
+        description: 'desc',
+        userId: 1,
+      };
+      const expected = { id: 1, ...createTaskInput };
+
+      await expect(taskResolver.createTask(expected)).rejects.toThrow();
     });
   });
 
