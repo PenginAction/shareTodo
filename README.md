@@ -62,10 +62,10 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## GraphQLでの実行
+<!-- ## GraphQLでの実行
 
 GraphQLの実行では、Altairで実行することをおすすめいたします．
 理由としましては、ファイル、画像の使用が可能なためです．
 
 Altair:
-https://altairgraphql.dev/
+https://altairgraphql.dev/ -->
